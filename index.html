@@ -2,87 +2,206 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,interactive-widget=resizes-content">
-<meta name="theme-color" content="#0f3d40">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+<meta name="theme-color" content="#f3efe7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1012" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Gebärden">
 <title>Gebärden-Dolmetscher</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ff6a4d'/%3E%3Cpath d='M22 40V22a3 3 0 0 1 6 0v12V18a3 3 0 0 1 6 0v16V20a3 3 0 0 1 6 0v18l3-5a3 3 0 0 1 5 3l-6 11a12 12 0 0 1-11 7h-2a10 10 0 0 1-10-10z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23ff6a4d'/%3E%3Cpath d='M22 40V22a3 3 0 0 1 6 0v12V18a3 3 0 0 1 6 0v16V20a3 3 0 0 1 6 0v18l3-5a3 3 0 0 1 5 3l-6 11a12 12 0 0 1-11 7h-2a10 10 0 0 1-10-10z' fill='%23fff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Archivo:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;700&family=Archivo:wdth,wght@100,700;100,800;125,900&display=swap" rel="stylesheet">
 <style>
 /*
-VOICE: ruhig, ein Handgriff – sprechen, sehen, fertig.
-IDEA: eine Dolmetscher-Bühne; das Video ist das Wichtigste.
-PICTURE: großes Gebärdenvideo mit dem Wort darunter.
-COLOUR and TYPE: tiefes Petrol, Sandweiß, Mohnrot; Archivo + Atkinson Hyperlegible.
-LAYOUT: Bühne oben, ein Eingabefeld, ein Knopf, Schnellsätze.
+VOICE: ruhig, sicher, wie ein gutes Kamera- oder Übersetzer-App-Interface: ein Handgriff, sofort Ergebnis.
+IDEA: ein Studio-Monitor – die Gebärde läuft groß im Licht, darunter das Wort, unten das Mikrofon wie ein Aufnahmeknopf.
+PICTURE: randloses Videopanel mit Story-Fortschrittsbalken, große Glosse, Wort-Zeitleiste.
+COLOUR and TYPE: warmes Papier / tiefes Graphit, Signal-Koralle als Aufnahme-Akzent, Petrol als Studiolicht; Archivo breit für Glossen, Atkinson Hyperlegible Next für Text.
+LAYOUT: Kopfzeile, Monitor, Zeitleiste; unten fest angedockt: Schnellsätze, Eingabe-Pille, runder Mikro-Knopf.
 */
-:root{color-scheme:light dark;--bg:light-dark(#f6f1e7,#10191b);--ink:light-dark(#1b2426,#eef0ea);--mute:light-dark(#5d6866,#a3b0ad);--card:light-dark(#fffdf8,#18252a);--line:light-dark(#e2d9c8,#2a3a3f);--stage:#0f3d40;--stage2:#0a2c2e;--sand:#f6ecd8;--acc:#e5533d}
+:root{color-scheme:light dark;
+--bg:light-dark(#f3efe7,#0b1012);--bg2:light-dark(#ebe5d9,#11181b);
+--surface:light-dark(#fffdf9,#151d20);--surface2:light-dark(#f7f3ec,#1b2529);
+--ink:light-dark(#141a1c,#eef1ee);--mute:light-dark(#6b7472,#8d9a98);--line:light-dark(rgba(20,26,28,.09),rgba(238,241,238,.08));
+--rec:#ff6a4d;--rec2:#ff8c6b;--studio:#0f4447;--glow:light-dark(rgba(15,68,71,.10),rgba(64,180,170,.10));
+--shadow:light-dark(0 1px 2px rgba(20,26,28,.06),0 1px 2px rgba(0,0,0,.4));
+--shadow-lg:light-dark(0 24px 48px -20px rgba(20,26,28,.28),0 24px 60px -20px rgba(0,0,0,.7));
+--r:28px;--dock:calc(150px + env(safe-area-inset-bottom))}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
-*{box-sizing:border-box;min-width:0}
-body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 "Atkinson Hyperlegible",system-ui,sans-serif;overflow-x:clip}
-.wrap{max-width:640px;margin:0 auto;padding:14px max(4vw,12px) 40px;display:grid;gap:14px}
-h1{font:800 22px/1.1 Archivo,sans-serif;margin:4px 2px 0}
-.stage{position:sticky;top:6px;z-index:2;box-shadow:0 10px 30px rgba(0,0,0,.18);border-radius:24px;background:radial-gradient(120% 90% at 50% 30%,#18595c 0%,var(--stage) 50%,var(--stage2) 100%);color:var(--sand);padding:14px 14px 16px;text-align:center;display:grid;gap:8px}
-.vbox{width:min(100%,calc(36svh*16/9));margin:0 auto;position:relative;border-radius:16px;overflow:hidden;background:#0a2224;aspect-ratio:16/9;cursor:pointer}
-#vv{display:block;width:100%;height:100%;object-fit:cover}
-.ph{position:absolute;inset:0;display:grid;place-items:center;font-size:15px;opacity:.75;padding:12px}
-.ph[hidden],#vv[hidden]{display:none}
-.gloss{font:800 clamp(30px,9vw,56px)/1.05 Archivo,sans-serif;overflow-wrap:anywhere;margin-top:4px}
-.spell{font:700 20px Archivo,sans-serif;letter-spacing:.3em;color:#ffcfbf;min-height:0}
-.spell:empty{display:none}
-.tick{display:flex;flex-wrap:wrap;gap:4px;justify-content:center}
-.tick button{background:none;border:0;color:var(--sand);opacity:.55;font:700 15px Archivo,sans-serif;padding:8px 8px;min-height:40px;cursor:pointer;border-radius:10px}
-.tick button.now{opacity:1;color:#ffcfbf;background:rgba(246,236,216,.1)}
-.bar{display:flex;gap:8px;align-items:stretch;background:var(--card);border:2px solid var(--line);border-radius:20px;padding:6px 6px 6px 14px}
-.bar:focus-within{border-color:var(--acc)}
-textarea{flex:1;border:0;background:transparent;color:var(--ink);font:inherit;font-size:20px;resize:none;outline:none;padding:10px 0;min-height:56px}
-.ib{width:52px;flex:none;border-radius:14px;border:0;background:transparent;color:var(--mute);font:700 26px/1 system-ui;cursor:pointer}
-.ib.mic{background:var(--acc);color:#fff;font-size:15px}
-.ib.on{animation:pulse 1.2s infinite}
-@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(229,83,61,.2)}}
-.hint{margin:-6px 4px 0;font-size:14px;color:var(--mute)}
-.go{min-height:58px;border-radius:999px;border:0;background:var(--ink);color:var(--bg);font:700 19px "Atkinson Hyperlegible",sans-serif;cursor:pointer}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chips button{min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:16px "Atkinson Hyperlegible",sans-serif;cursor:pointer}
-textarea:focus-visible{outline:none}
-button:focus-visible,.vbox:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
-details{font-size:15px;color:var(--mute)}
-summary{cursor:pointer;min-height:40px;display:flex;align-items:center}
-@media(prefers-reduced-motion:reduce){.ib.on{animation:none}}
+*{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
+html{height:100%}
+body{margin:0;min-height:100%;background:radial-gradient(120% 60% at 50% -10%,var(--glow),transparent 60%),var(--bg);color:var(--ink);font:16px/1.5 "Atkinson Hyperlegible Next","Atkinson Hyperlegible",system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-user-select:none;user-select:none}
+.app{max-width:560px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 10px) 16px calc(var(--dock) + 24px);display:grid;gap:14px}
+
+/* Kopfzeile */
+.top{display:flex;align-items:center;justify-content:space-between;height:44px}
+.brand{display:flex;align-items:center;gap:10px;font:900 19px/1 Archivo,sans-serif;font-stretch:112%;letter-spacing:-.01em}
+.logo{width:30px;height:30px;border-radius:9px;background:var(--rec);display:grid;place-items:center;box-shadow:0 6px 16px -6px var(--rec)}
+.logo svg{width:20px;height:20px}
+.iconbtn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;box-shadow:var(--shadow)}
+.iconbtn svg{width:20px;height:20px}
+
+/* Monitor */
+.monitor{position:sticky;top:calc(env(safe-area-inset-top) + 8px);z-index:3;background:var(--surface);border:1px solid var(--line);border-radius:calc(var(--r) + 6px);padding:8px;box-shadow:var(--shadow-lg)}
+.screen{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:16/9;max-height:40svh;width:100%;background:radial-gradient(120% 100% at 50% 0%,#1d6064 0%,var(--studio) 45%,#082426 100%);cursor:pointer;isolation:isolate}
+.screen video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.02);transition:opacity .28s ease,transform .5s cubic-bezier(.2,.8,.2,1)}
+.screen video.on{opacity:1;transform:none}
+.segs{position:absolute;left:12px;right:12px;top:12px;display:flex;gap:4px;z-index:2}
+.segs i{flex:1;height:4px;border-radius:4px;background:rgba(10,30,32,.22);box-shadow:0 0 0 1px rgba(255,255,255,.25);overflow:hidden;position:relative}
+.segs i::after{content:"";position:absolute;inset:0;width:var(--p,0%);background:var(--rec);border-radius:inherit}
+.badge{position:absolute;left:12px;bottom:12px;z-index:2;display:flex;align-items:center;gap:6px;padding:6px 10px 6px 8px;border-radius:999px;background:rgba(8,20,22,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;font-size:13px;font-weight:500}
+.badge b{width:8px;height:8px;border-radius:50%;background:#5fe3b5}
+.badge.live b{background:var(--rec);animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.35}}
+.replay{position:absolute;right:12px;bottom:12px;z-index:2;width:40px;height:40px;border-radius:50%;border:0;background:rgba(8,20,22,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:grid;place-items:center;color:#fff}
+.replay svg{width:18px;height:18px}
+.empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#e9f3f1;padding:24px;z-index:1}
+.empty[hidden]{display:none}
+.empty .hand{width:64px;height:64px;margin:0 auto 10px;opacity:.9}
+.empty p{margin:0;font-size:15px;opacity:.85;max-width:26ch}
+.spell{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.spell span{min-width:34px;height:40px;padding:0 6px;border-radius:10px;background:rgba(255,255,255,.14);display:grid;place-items:center;font:800 20px Archivo,sans-serif;color:#fff;animation:pop .3s both}
+@keyframes pop{from{transform:translateY(6px);opacity:0}}
+.shimmer{position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.08) 50%,transparent 70%);background-size:200% 100%;animation:sh 1.2s infinite;z-index:1}
+.shimmer[hidden]{display:none}
+@keyframes sh{to{background-position:-200% 0}}
+
+.caption{padding:14px 10px 8px;text-align:center}
+.gloss{font:900 clamp(34px,10.5vw,58px)/1 Archivo,sans-serif;font-stretch:118%;letter-spacing:-.02em;overflow-wrap:anywhere;text-wrap:balance}
+.gloss.swap{animation:rise .32s cubic-bezier(.2,.8,.2,1)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}}
+.gloss.idle{color:var(--mute);font-size:clamp(26px,7.5vw,40px)}
+.screen.idle .replay,.screen.idle .badge{opacity:0;pointer-events:none}
+.src{margin-top:6px;color:var(--mute);font-size:14px;min-height:21px}
+
+/* Zeitleiste */
+.timeline{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 4px;scroll-snap-type:x proximity;mask-image:linear-gradient(90deg,transparent,#000 12px,#000 calc(100% - 12px),transparent)}
+.timeline::-webkit-scrollbar{display:none}
+.timeline button{flex:none;scroll-snap-align:center;height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface2);font:800 13px Archivo,sans-serif;letter-spacing:.02em;color:var(--mute);transition:all .2s}
+.timeline button.now{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.timeline button.nov{border-style:dashed}
+
+.sect{font-size:13px;color:var(--mute);margin:6px 4px -4px;font-weight:500}
+.notice{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:14px 16px;font-size:14px;color:var(--mute);display:flex;gap:10px;align-items:flex-start}
+.notice svg{flex:none;width:18px;height:18px;margin-top:2px;color:var(--rec)}
+
+/* Dock unten */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:10px 12px calc(env(safe-area-inset-bottom) + 12px);background:linear-gradient(to top,var(--bg) 62%,transparent)}
+.dock-in{max-width:560px;margin:0 auto;display:grid;gap:10px}
+.quick{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px}
+.quick::-webkit-scrollbar{display:none}
+.quick button{flex:none;height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow);font-size:15px;white-space:nowrap}
+.row{display:flex;gap:10px;align-items:flex-end}
+.pill{flex:1;display:flex;align-items:flex-end;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:28px;padding:4px 4px 4px 18px;box-shadow:var(--shadow-lg);transition:border-color .2s}
+.pill:focus-within{border-color:color-mix(in srgb,var(--rec) 60%,transparent)}
+textarea{flex:1;border:0;background:transparent;color:var(--ink);font:inherit;font-size:17px;line-height:1.35;resize:none;outline:none;padding:13px 0;max-height:96px;min-height:48px;field-sizing:content}
+textarea::placeholder{color:var(--mute)}
+.mini{width:44px;height:44px;flex:none;border:0;border-radius:50%;background:transparent;color:var(--mute);display:grid;place-items:center}
+.mini svg{width:20px;height:20px}
+.mini.play{background:var(--ink);color:var(--bg)}
+.mini[hidden]{display:none}
+.mic{position:relative;width:64px;height:64px;flex:none;border:0;border-radius:50%;background:var(--rec);color:#fff;display:grid;place-items:center;box-shadow:0 12px 28px -10px var(--rec),inset 0 1px 0 rgba(255,255,255,.35);transition:transform .15s}
+.mic:active{transform:scale(.94)}
+.mic svg{width:26px;height:26px;position:relative;z-index:1}
+.mic .ring{position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--rec);opacity:0}
+.mic.on .ring{animation:ring 1.4s infinite}
+.mic.on .ring:nth-child(2){animation-delay:.7s}
+@keyframes ring{from{opacity:.6;transform:scale(.9)}to{opacity:0;transform:scale(1.35)}}
+.wave{display:none;gap:3px;align-items:center;height:22px;position:relative;z-index:1}
+.wave i{width:3px;height:8px;border-radius:2px;background:#fff;animation:wv .9s infinite ease-in-out}
+.wave i:nth-child(2){animation-delay:.15s}.wave i:nth-child(3){animation-delay:.3s}.wave i:nth-child(4){animation-delay:.45s}
+@keyframes wv{50%{height:22px}}
+.mic.on svg{display:none}.mic.on .wave{display:flex}
+
+.toast{position:fixed;left:50%;bottom:calc(var(--dock) + 10px);transform:translate(-50%,20px);opacity:0;z-index:6;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:14px;font-size:14px;max-width:min(92vw,420px);text-align:center;pointer-events:none;transition:all .25s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+dialog{border:0;padding:0;background:transparent;max-width:560px;width:100%;margin:auto auto 0;color:var(--ink)}
+dialog::backdrop{background:rgba(5,10,12,.45);backdrop-filter:blur(4px)}
+.sheet{background:var(--surface);border-radius:28px 28px 0 0;padding:10px 22px calc(env(safe-area-inset-bottom) + 24px)}
+.grab{width:40px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 14px}
+.sheet h2{font:900 24px/1.1 Archivo,sans-serif;font-stretch:112%;margin:0 0 10px}
+.sheet p,.sheet li{color:var(--mute);font-size:15px}
+.sheet ul{padding-left:18px;margin:0 0 16px}
+.sheet .close{width:100%;height:52px;border-radius:16px;border:0;background:var(--ink);color:var(--bg);font-weight:700}
+button:focus-visible,.screen:focus-visible{outline:3px solid var(--rec);outline-offset:2px}
+@media(min-width:700px){.app{padding-top:28px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>Gebärden-Dolmetscher</h1>
+<div class="app">
+  <header class="top">
+    <div class="brand"><span class="logo"><svg viewBox="0 0 64 64"><path d="M22 40V22a3 3 0 0 1 6 0v12V18a3 3 0 0 1 6 0v16V20a3 3 0 0 1 6 0v18l3-5a3 3 0 0 1 5 3l-6 11a12 12 0 0 1-11 7h-2a10 10 0 0 1-10-10z" fill="#fff"/></svg></span>Gebärden</div>
+    <button class="iconbtn" id="info" type="button" aria-label="Infos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></button>
+  </header>
 
-  <section class="stage" aria-live="polite">
-    <div class="vbox" id="vbox" tabindex="0" role="button" aria-label="Gebärde wiederholen">
-      <video id="vv" muted playsinline autoplay loop hidden preload="auto"></video>
-      <div class="ph" id="ph">Sprich oder tippe unten – hier erscheint die Gebärde.</div>
+  <section class="monitor" aria-live="polite">
+    <div class="screen idle" id="screen" tabindex="0" role="button" aria-label="Gebärde wiederholen">
+      <video id="va" muted playsinline preload="auto"></video>
+      <video id="vb" muted playsinline preload="auto"></video>
+      <div class="shimmer" id="shim" hidden></div>
+      <div class="segs" id="segs"></div>
+      <div class="empty" id="empty">
+        <div>
+          <svg class="hand" viewBox="0 0 64 64" fill="none" stroke="#e9f3f1" stroke-width="2.5" stroke-linejoin="round"><path d="M22 40V22a3 3 0 0 1 6 0v12V18a3 3 0 0 1 6 0v16V20a3 3 0 0 1 6 0v18l3-5a3 3 0 0 1 5 3l-6 11a12 12 0 0 1-11 7h-2a10 10 0 0 1-10-10z"/></svg>
+          <p id="emptyText">Tippe auf das Mikrofon und sprich – die Gebärden erscheinen hier.</p>
+          <div class="spell" id="spell"></div>
+        </div>
+      </div>
+      <div class="badge" id="badge"><b></b><span id="badgeText">Bereit</span></div>
+      <button class="replay" id="replay" type="button" aria-label="Wiederholen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
     </div>
-    <div class="gloss" id="gl">HALLO</div>
-    <div class="spell" id="sp"></div>
-    <div class="tick" id="tick"></div>
+    <div class="caption">
+      <div class="gloss idle" id="gl">Sag etwas</div>
+      <div class="src" id="src">Deutsche Gebärdensprache · live</div>
+    </div>
   </section>
 
-  <div class="bar">
-    <textarea id="txt" rows="2" placeholder="Hier sprechen oder tippen …" aria-label="Was gesagt wird"></textarea>
-    <button class="ib mic" id="mic" type="button" hidden aria-label="Spracheingabe">Mikro</button>
-    <button class="ib" id="clr" type="button" aria-label="Text löschen">×</button>
-  </div>
-  <p class="hint" id="hint">Ins Feld tippen und das Mikrofon deiner Tastatur nutzen – die Gebärden erscheinen sofort.</p>
+  <div class="timeline" id="tl" aria-label="Gebärden im Satz"></div>
 
-  <button class="go" id="play" type="button">▶ Ganzen Satz zeigen</button>
-
-  <div class="chips" id="quick"></div>
-
-  <details>
-    <summary>Infos &amp; Grenzen</summary>
-    <p>Die App ordnet Sätze vereinfacht in DGS-Reihenfolge (Zeit vorn, Verb hinten, Verneinung und Fragewort am Ende). Mimik und Raum kann sie nicht zeigen. Videos: Kurzclips aus dem Digitalen Wörterbuch DGS der Universität Hamburg – nur privat nutzen, nicht öffentlich teilen. Wörter ohne Video, etwa Namen, werden buchstabiert. Für Arzt, Amt oder Arbeit ersetzt die App keine Dolmetscherin.</p>
-  </details>
+  <div class="notice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span>Vereinfachte DGS-Reihenfolge. Mimik und Raum zeigt die App nicht – für Arzt, Amt oder Arbeit ersetzt sie keine Dolmetscherin.</span></div>
 </div>
+
+<div class="dock">
+  <div class="dock-in">
+    <div class="quick" id="quick"></div>
+    <div class="row">
+      <div class="pill">
+        <textarea id="txt" rows="1" placeholder="Sprechen oder tippen …" aria-label="Was gesagt wird" enterkeyhint="go"></textarea>
+        <button class="mini" id="clr" type="button" aria-label="Löschen" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        <button class="mini play" id="play" type="button" aria-label="Ganzen Satz abspielen"><svg id="playIco" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></button>
+      </div>
+      <button class="mic" id="mic" type="button" aria-label="Spracheingabe starten" aria-pressed="false">
+        <span class="ring"></span><span class="ring"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+        <span class="wave"><i></i><i></i><i></i><i></i></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<dialog id="sheet">
+  <div class="sheet">
+    <div class="grab"></div>
+    <h2>So funktioniert’s</h2>
+    <ul>
+      <li>Mikrofon antippen und sprechen – jedes Wort erscheint sofort als Gebärde.</li>
+      <li>▶ spielt den ganzen Satz in DGS-Reihenfolge ab (Zeit vorn, Verb hinten, Verneinung und Fragewort am Ende).</li>
+      <li>Aufs Video tippen wiederholt die Gebärde, ein Wort in der Leiste springt dorthin.</li>
+      <li>Wörter ohne Video, etwa Namen, werden mit dem Fingeralphabet buchstabiert.</li>
+      <li>Videos: Digitales Wörterbuch DGS, Universität Hamburg (dw-dgs.de).</li>
+      <li>Tipp: Im Browser „Teilen → Zum Home-Bildschirm“ – dann startet die App wie jede andere.</li>
+    </ul>
+    <button class="close" id="sheetClose" type="button">Verstanden</button>
+  </div>
+</dialog>
 
 <script>
 {
@@ -164,58 +283,77 @@ const pack=n=>packs[n]||(packs[n]=fetch("d/"+n+".json").then(r=>{if(!r.ok)throw 
 let REMOTE=false;const remote=c=>"https://www.sign-lang.uni-hamburg.de/korpusdict/micons/"+c+".mp4";
 const clipUrl=c=>REMOTE?Promise.resolve(remote(c)):urls[c]||(urls[c]=pack(PI[c]).then(o=>{const s=atob(o[c]),a=new Uint8Array(s.length);for(let i=0;i<s.length;i++)a[i]=s.charCodeAt(i);return URL.createObjectURL(new Blob([a],{type:"video/mp4"}))}).catch(e=>{delete urls[c];if(e===404){REMOTE=true;return remote(c)}throw e}));
 const prefetch=()=>{if(REMOTE)return;seq.forEach(t=>{const e=entry(t);if(e&&e.c&&PI[e.c]!=null)clipUrl(e.c).catch(()=>{})})};
-let seq=[],idx=0,playing=false,shown=0,stepT=null;
+let seq=[],idx=0,playing=false,shown=0,stepT=null,cur=$("va"),alt=$("vb");
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const buzz=()=>{try{navigator.vibrate&&navigator.vibrate(8)}catch(e){}};
+let toastT;function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove("show"),2600)}
 function newest(){let b=0;seq.forEach((t,j)=>{if(t.pos>=seq[b].pos)b=j});return b}
+function segs(p){$("segs").innerHTML=seq.length>1?seq.map((_,j)=>`<i style="--p:${j<idx?100:j===idx?p:0}%"></i>`).join(""):""}
+function setBadge(t,live){$("badgeText").textContent=t;$("badge").classList.toggle("live",!!live)}
+function hideVideos(){[cur,alt].forEach(v=>{v.classList.remove("on");v.pause()})}
 function show(i){
-  const v=$("vv");
-  if(!seq.length){$("gl").textContent="HALLO";$("sp").textContent="";$("tick").innerHTML="";v.hidden=true;v.removeAttribute("src");$("ph").hidden=false;$("ph").textContent="Sprich oder tippe unten – hier erscheint die Gebärde.";return}
+  clearTimeout(stepT);cur.onended=null;cur.ontimeupdate=null;
+  if(!seq.length){$("screen").classList.add("idle");$("gl").textContent="Sag etwas";$("gl").classList.remove("swap");$("gl").classList.add("idle");$("src").textContent="Deutsche Gebärdensprache · live";$("tl").innerHTML="";$("segs").innerHTML="";hideVideos();$("empty").hidden=false;$("emptyText").textContent="Tippe auf das Mikrofon und sprich – die Gebärden erscheinen hier.";$("spell").innerHTML="";$("shim").hidden=true;if(!listening)setBadge("Bereit");return}
   idx=Math.max(0,Math.min(i,seq.length-1));const t=seq[idx],tok=++shown,e=entry(t);
-  $("gl").textContent=t.g+(t.q?" ?":"");
-  $("sp").textContent=(t.spell||!(e&&e.c))?t.g.replace(/[^A-ZÄÖÜß]/g,"").split("").join("-"):"";
-  $("tick").innerHTML=seq.map((x,j)=>`<button type="button" data-i="${j}" class="${j===idx?"now":""}">${esc(x.g)}</button>`).join("");
-  clearTimeout(stepT);v.onended=null;
+  $("screen").classList.remove("idle");const g=$("gl");g.classList.remove("swap","idle");void g.offsetWidth;g.textContent=t.g.replace(/-/g," ")+(t.q?" ?":"");g.classList.add("swap");
+  $("src").textContent="„"+t.src+"“"+(seq.length>1?" · "+(idx+1)+"/"+seq.length:"");
+  $("tl").innerHTML=seq.map((x,j)=>{const ex=entry(x);return`<button type="button" data-i="${j}" class="${j===idx?"now":""} ${ex&&ex.c?"":"nov"}">${esc(x.g.replace(/-/g," "))}</button>`}).join("");
+  const nb=$("tl").querySelector(".now");if(nb)nb.scrollIntoView({block:"nearest",inline:"center",behavior:"smooth"});
+  segs(0);
   if(e&&e.c){
-    $("ph").hidden=false;$("ph").textContent="Video lädt …";
-    clipUrl(e.c).then(u=>{if(tok!==shown)return;$("ph").hidden=true;v.hidden=false;v.loop=!playing;v.src=u;v.play().catch(()=>{});
-      if(playing)v.onended=()=>{stepT=setTimeout(next,250)}}).catch(()=>{if(tok===shown){$("ph").textContent="Video nicht verfügbar";if(playing)stepT=setTimeout(next,1400)}});
-  }else{
-    v.hidden=true;v.removeAttribute("src");$("ph").hidden=false;$("ph").textContent="Kein Video – bitte buchstabieren";
-    if(playing)stepT=setTimeout(next,1600);
-  }
+    $("empty").hidden=true;$("shim").hidden=false;
+    clipUrl(e.c).then(u=>{if(tok!==shown)return;
+      const v=alt;v.loop=!playing;v.src=u;v.playbackRate=1;
+      v.onloadeddata=()=>{if(tok!==shown)return;$("shim").hidden=true;v.classList.add("on");cur.classList.remove("on");cur.pause();[cur,alt]=[v,cur];v.play().catch(()=>{});
+        v.ontimeupdate=()=>{if(playing&&v.duration)segs(Math.min(100,v.currentTime/v.duration*100))};
+        if(playing)v.onended=()=>{segs(100);stepT=setTimeout(next,200)}};
+      v.onerror=()=>{if(tok!==shown)return;noVideo(t,"Video nicht verfügbar")};
+    }).catch(()=>{if(tok===shown)noVideo(t,"Video nicht verfügbar")});
+  }else noVideo(t,t.name?"Name – buchstabieren":"Kein Video – buchstabieren");
 }
+function noVideo(t,msg){hideVideos();$("shim").hidden=true;$("empty").hidden=false;$("emptyText").textContent=msg;
+  $("spell").innerHTML=t.g.replace(/[^A-ZÄÖÜß]/g,"").split("").map((c,k)=>`<span style="animation-delay:${k*60}ms">${c}</span>`).join("");
+  if(playing)stepT=setTimeout(next,1800)}
 function next(){if(!playing)return;if(idx>=seq.length-1){stopPlay();return}show(idx+1)}
-function stopPlay(){playing=false;clearTimeout(stepT);$("vv").onended=null;$("vv").loop=true;$("play").textContent="▶ Ganzen Satz zeigen"}
-function startPlay(){if(!seq.length)return;playing=true;$("play").textContent="■ Stopp";show(0)}
-function update(){seq=translate($("txt").value);prefetch();if(!playing)show(seq.length?newest():0)}
+const PLAY='<path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/>',STOP='<rect x="6" y="6" width="12" height="12" rx="2.5"/>';
+function stopPlay(){playing=false;clearTimeout(stepT);cur.onended=null;cur.loop=true;cur.play().catch(()=>{});$("playIco").innerHTML=PLAY;$("play").setAttribute("aria-label","Ganzen Satz abspielen");if(!listening)setBadge(seq.length?"Bereit":"Bereit")}
+function startPlay(){if(!seq.length){toast("Erst etwas sagen oder tippen");return}playing=true;$("playIco").innerHTML=STOP;$("play").setAttribute("aria-label","Stopp");setBadge("Wiedergabe");show(0)}
+function update(){seq=translate($("txt").value);$("clr").hidden=!$("txt").value;prefetch();if(!playing)show(seq.length?newest():0)}
 
-const QUICK=["Hallo, wie heißt du?","Ich verstehe nicht.","Bitte langsamer.","Kannst du das wiederholen?","Danke!","Wo ist die Toilette?","Ich brauche Hilfe.","Wie geht es dir?"];
+const QUICK=["Hallo, wie geht's dir?","Wie heißt du?","Ich verstehe nicht.","Bitte langsamer.","Kannst du das wiederholen?","Danke!","Wo ist die Toilette?","Ich brauche Hilfe.","Guten Morgen!"];
 $("quick").innerHTML=QUICK.map(q=>`<button type="button">${q}</button>`).join("");
 
-// Spracherkennung (wo der Browser sie erlaubt)
-const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,listening=false;
-if(SR)$("mic").hidden=false;
-function micOff(){listening=false;$("mic").classList.remove("on");$("mic").textContent="Mikro"}
+// Spracherkennung
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,listening=false,micOK=!!SR;
+function micOff(){listening=false;$("mic").classList.remove("on");$("mic").setAttribute("aria-pressed","false");$("mic").setAttribute("aria-label","Spracheingabe starten");if(!playing)setBadge("Bereit")}
+function keyboardHint(){micOK=false;$("txt").focus();toast("Mikro hier gesperrt – nutze das Mikrofon deiner Tastatur")}
 $("mic").addEventListener("click",()=>{
+  buzz();
+  if(!micOK){keyboardHint();return}
   if(listening){try{rec.stop()}catch(e){}micOff();return}
-  try{rec=new SR();rec.lang="de-DE";rec.interimResults=true;rec.continuous=true;
+  try{
+    stopPlay();rec=new SR();rec.lang="de-DE";rec.interimResults=true;rec.continuous=true;
     const base=$("txt").value?$("txt").value.trim()+" ":"";
     rec.onresult=ev=>{let s="";for(const r of ev.results)s+=r[0].transcript;$("txt").value=base+s;update()};
-    rec.onerror=()=>{micOff();$("mic").hidden=true;$("hint").textContent="Mikrofon hier nicht erlaubt – nutze das Mikrofon deiner Tastatur."};
-    rec.onend=micOff;rec.start();listening=true;$("mic").classList.add("on");$("mic").textContent="Stopp";
-  }catch(e){micOff();$("mic").hidden=true}
+    rec.onerror=ev=>{micOff();if(ev.error==="not-allowed"||ev.error==="service-not-allowed"||ev.error==="audio-capture")keyboardHint();else if(ev.error!=="no-speech"&&ev.error!=="aborted")toast("Spracherkennung unterbrochen")};
+    rec.onend=micOff;rec.start();listening=true;$("mic").classList.add("on");$("mic").setAttribute("aria-pressed","true");$("mic").setAttribute("aria-label","Spracheingabe stoppen");setBadge("Hört zu …",true);
+  }catch(e){micOff();keyboardHint()}
 });
 
 let deb;
-$("txt").addEventListener("input",()=>{stopPlay();clearTimeout(deb);deb=setTimeout(update,80)});
-$("txt").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();update();startPlay()}});
-$("clr").addEventListener("click",()=>{stopPlay();$("txt").value="";update();$("txt").focus()});
-$("play").addEventListener("click",()=>{if(playing)stopPlay();else{update();startPlay()}});
-const replay=()=>{const v=$("vv");if(!v.hidden){v.currentTime=0;v.play().catch(()=>{})}};
-$("vbox").addEventListener("click",replay);
-$("vbox").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();replay()}});
-$("tick").addEventListener("click",e=>{const b=e.target.closest("button");if(b){stopPlay();show(+b.dataset.i)}});
-$("quick").addEventListener("click",e=>{const b=e.target.closest("button");if(b){$("txt").value=b.textContent;update();startPlay()}});
+$("txt").addEventListener("input",()=>{if(playing)stopPlay();clearTimeout(deb);deb=setTimeout(update,70)});
+$("txt").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();update();startPlay();$("txt").blur()}});
+$("clr").addEventListener("click",()=>{buzz();stopPlay();$("txt").value="";update();$("txt").focus()});
+$("play").addEventListener("click",()=>{buzz();if(playing)stopPlay();else{update();startPlay()}});
+const replay=()=>{if(cur.classList.contains("on")){cur.currentTime=0;cur.play().catch(()=>{})}else if(seq.length)show(idx)};
+$("screen").addEventListener("click",e=>{if(e.target.closest("#replay"))return;replay()});
+$("replay").addEventListener("click",()=>{buzz();replay()});
+$("screen").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();replay()}});
+$("tl").addEventListener("click",e=>{const b=e.target.closest("button");if(b){buzz();stopPlay();show(+b.dataset.i)}});
+$("quick").addEventListener("click",e=>{const b=e.target.closest("button");if(b){buzz();$("txt").value=b.textContent;update();startPlay()}});
+$("info").addEventListener("click",()=>{try{$("sheet").showModal()}catch(e){$("sheet").setAttribute("open","")}});
+$("sheetClose").addEventListener("click",()=>$("sheet").close());
+$("sheet").addEventListener("click",e=>{if(e.target===$("sheet"))$("sheet").close()});
 show(0);
 }
 </script>
