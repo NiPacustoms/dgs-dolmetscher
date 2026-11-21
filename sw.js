@@ -1,5 +1,5 @@
 // Gebärden-Dolmetscher – Service Worker: App offline, Gebärden-Medien zwischenspeichern
-const SHELL_V="dgs-shell-v3",MEDIA="dgs-media-v1",FONTS="dgs-fonts-v1";
+const SHELL_V="dgs-shell-v4",MEDIA="dgs-media-v1",FONTS="dgs-fonts-v1";
 const SHELL=["./","index.html","manifest.webmanifest","icon-192.png","icon-512.png"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(SHELL_V).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith("dgs-shell")&&k!==SHELL_V).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
